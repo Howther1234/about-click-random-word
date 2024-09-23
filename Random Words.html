@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>读取系统</title>
+    <style>
+        *{
+            border: 2px  solid pink;
+            font-size: 35px;
+            text-align: center;
+            margin:0;
+        }
+        header{
+            height: 25%;
+            background-color:antiquewhite;
+        }
+        main{
+            height:50%;
+            background-color:aquamarine;
+        }
+        footer{
+            height:25%;
+            background-color:blanchedalmond;
+        }
+    </style>
+</head>
+<body>
+    <header>随机单词</header>
+        <main>
+            <p id = "en">abandon</p>
+            <p id = "pr">/ə'bændən/</p>
+            <p id = "cn">vt.离弃,丢弃;遗弃,抛弃;放弃</p>
+        </main>
+        <button id = "loadCet" >读入单词</button>
+        <button id = "randWord" >随机单词</button>
+    <footer>广告位招租</footer>
+    <script>
+        let cet6String = '';
+        let loadCet = select("button#loadCet");
+        let randWord = select("button#randWord");
+        loadCet.onclick = function(){
+         fetch('cet6.txt')
+         .then(res => res.text())
+         .then(txt => cet6String = txt);
+        } ;
+            randWord.onclick = function(){
+                if (cet6String.length == 0){
+                    let s = '未检测到输入';
+                    select('footer').textContent = s ;
+                }
+                else{
+                    let arr = cet6String.split('\r\n');
+                    let rand = Math.floor(Math.random()*arr.length );
+                    let str = arr[rand];
+                    let begin = str.indexOf('\t');
+                    let end = str.lastIndexOf('\t');
+                    // console.log('b' + begin + 'e' + end);
+                    let en = str.slice(0,begin) ;
+                    let pr = str.slice(begin+1,end) ;
+                     let cn = str.slice(end +1) ; 
+                     select('p#en').textContent = en ;
+                    select('p#pr').textContent = pr ;
+                    select('p#cn').textContent = cn ;
+    
+                }
+            };
+        function select(selector){
+            let dom = document.querySelector(selector);
+            return dom;
+        }
+        </script>
+</body>
+</html>
